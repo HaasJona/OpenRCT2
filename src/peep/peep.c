@@ -8035,17 +8035,32 @@ loc_69B221:
 	else
 		peep->item_standard_flags |= (1 << shopItem);
 
+	uint8 item_colour = ride->track_colour_main[0];
+
+	if(ride->track_colour_main[1] == 0xff){
+		unsigned int scenarioRand = scenario_rand();
+		if((scenarioRand & 96) == 0) {
+			item_colour = (uint8) (scenarioRand & 31);
+		}
+		else if((scenarioRand & 64) == 0) {
+			item_colour = peep->tshirt_colour;
+		}
+		else {
+			item_colour = peep->trousers_colour;
+		}
+	}
+
 	if (shopItem == SHOP_ITEM_TSHIRT)
-		peep->tshirt_colour = ride->track_colour_main[0];
+		peep->tshirt_colour = item_colour;
 
 	if (shopItem == SHOP_ITEM_HAT)
-		peep->hat_colour = ride->track_colour_main[0];
+		peep->hat_colour = item_colour;
 
 	if (shopItem == SHOP_ITEM_BALLOON)
-		peep->balloon_colour = ride->track_colour_main[0];
+		peep->balloon_colour = item_colour;
 
 	if (shopItem == SHOP_ITEM_UMBRELLA)
-		peep->umbrella_colour = ride->track_colour_main[0];
+		peep->umbrella_colour = item_colour;
 
 	if (shopItem == SHOP_ITEM_MAP)
 		sub_69A98C(peep);

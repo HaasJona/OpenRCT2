@@ -2174,6 +2174,9 @@ enum {
 
 	STR_UI_SCALING_DESC = 5579,
 
+	STR_RANDOM_ITEM_COLOUR = 5580,
+	STR_RANDOM_ITEM_COLOUR_TIP = 5581,
+
 	// Have to include resource strings (from scenarios and objects) for the time being now that language is partially working
 	STR_COUNT = 32768
 };

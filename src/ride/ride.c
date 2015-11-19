@@ -5852,6 +5852,14 @@ bool ride_type_has_flag(int rideType, int flag)
 	return (RCT2_GLOBAL(RCT2_ADDRESS_RIDE_FLAGS + (rideType * 8), uint32) & flag) != 0;
 }
 
+bool shop_item_is_coloured(int shop_item) {
+	// see sub_69AF1E in peep.c
+	return shop_item == SHOP_ITEM_TSHIRT
+		   || shop_item == SHOP_ITEM_HAT
+		   || shop_item == SHOP_ITEM_BALLOON
+		   || shop_item == SHOP_ITEM_UMBRELLA;
+}
+
 /*
  * The next six functions are helpers to access ride data at the offset 10E &
  * 110. We believe it stores three distinct values in the following format:

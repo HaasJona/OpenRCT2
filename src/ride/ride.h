@@ -1019,4 +1019,6 @@ const uint8* ride_seek_available_modes(rct_ride *ride);
 
 void window_ride_construction_mouseup_demolish_next_piece(int x, int y, int z, int direction, int type);
 
+bool shop_item_is_coloured(int rideType);
+
 #endif

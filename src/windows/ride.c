@@ -148,6 +148,7 @@ enum {
 	WIDX_VEHICLE_MAIN_COLOUR,
 	WIDX_VEHICLE_ADDITIONAL_COLOUR_1,
 	WIDX_VEHICLE_ADDITIONAL_COLOUR_2,
+	WIDX_RANDOM_SHOP_COLOUR,
 
 	WIDX_PLAY_MUSIC = 14,
 	WIDX_MUSIC,
@@ -350,6 +351,7 @@ static rct_widget window_ride_colour_widgets[] = {
 	{ WWT_COLORBTN,			1,	79,		90,		190,	201,	0xFFFFFFFF,						STR_SELECT_MAIN_COLOUR_TIP									},
 	{ WWT_COLORBTN,			1,	99,		110,	190,	201,	0xFFFFFFFF,						STR_SELECT_ADDITIONAL_COLOUR_1_TIP							},
 	{ WWT_COLORBTN,			1,	119,	130,	190,	201,	0xFFFFFFFF,						STR_SELECT_ADDITIONAL_COLOUR_2_TIP							},
+	{ WWT_CHECKBOX,			1,	99,	    312,	 74,	85,		STR_RANDOM_ITEM_COLOUR,			STR_RANDOM_ITEM_COLOUR_TIP									},
 	{ WIDGETS_END },
 };
 
@@ -497,7 +499,7 @@ const uint64 window_ride_page_enabled_widgets[] = {
 	0x00000000001EFFF4,
 	0x0000019E777DBFF4,
 	0x000000000003FFF4,
-	0x00000003F37F3FF4,
+	0x00000007F37F3FF4,
 	0x000000000001FFF4,
 	0x000000000007FFF4,
 	0x000000000007BFF4,
@@ -3897,13 +3899,13 @@ static void window_ride_colour_mousedown(int widgetIndex, rct_window *w, rct_wid
 		}
 
 		window_dropdown_show_text_custom_width(
-			w->x + dropdownWidget->left,
-			w->y + dropdownWidget->top,
-			dropdownWidget->bottom - dropdownWidget->top + 1,
-			w->colours[1],
-			DROPDOWN_FLAG_STAY_OPEN,
-			numItems,
-			widget->right - dropdownWidget->left
+				w->x + dropdownWidget->left,
+				w->y + dropdownWidget->top,
+				dropdownWidget->bottom - dropdownWidget->top + 1,
+				w->colours[1],
+				DROPDOWN_FLAG_STAY_OPEN,
+				numItems,
+				widget->right - dropdownWidget->left
 		);
 
 		dropdown_set_checked(w->var_48C, true);
@@ -3919,6 +3921,14 @@ static void window_ride_colour_mousedown(int widgetIndex, rct_window *w, rct_wid
 	case WIDX_VEHICLE_ADDITIONAL_COLOUR_2:
 		vehicleColour = ride_get_vehicle_colour(ride, w->var_48C);
 		window_dropdown_show_colour(w, widget, w->colours[1], vehicleColour.additional_2);
+		break;
+	case WIDX_RANDOM_SHOP_COLOUR:
+		if (ride->track_colour_main[1] == (uint8) 0xff) {
+			game_do_command(0, (0 << 8) | 1, 0, 0x0000 | w->number, GAME_COMMAND_SET_RIDE_APPEARANCE, 1, 0);
+		}
+		else {
+			game_do_command(0, (0 << 8) | 1, 0, 0xff00 | w->number, GAME_COMMAND_SET_RIDE_APPEARANCE, 1, 0);
+		}
 		break;
 	}
 }
@@ -4080,6 +4090,22 @@ static void window_ride_colour_invalidate(rct_window *w)
 		window_ride_colour_widgets[WIDX_TRACK_SUPPORT_COLOUR].image = window_ride_get_colour_button_image(trackColour.supports);
 	} else {
 		window_ride_colour_widgets[WIDX_TRACK_SUPPORT_COLOUR].type = WWT_EMPTY;
+	}
+
+	// Shop random colour checkbox
+	if (ride_type_has_flag(ride->type, RIDE_TYPE_FLAG_IS_SHOP)
+			&& (shop_item_is_coloured(gRideTypeList[ride->subtype]->shop_item)
+					   || shop_item_is_coloured(gRideTypeList[ride->subtype]->shop_item_secondary))) {
+		window_ride_colour_widgets[WIDX_RANDOM_SHOP_COLOUR].type = WWT_CHECKBOX;
+		if(ride->track_colour_main[1] == 0xff){
+			w->pressed_widgets |= (1ull << WIDX_RANDOM_SHOP_COLOUR);
+		}
+		else {
+			w->pressed_widgets &= ~(1ull << WIDX_RANDOM_SHOP_COLOUR);
+		}
+
+	} else {
+		window_ride_colour_widgets[WIDX_RANDOM_SHOP_COLOUR].type = WWT_EMPTY;
 	}
 
 	// Track preview
