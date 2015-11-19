@@ -8039,15 +8039,7 @@ loc_69B221:
 
 	if(ride->track_colour_main[1] == 0xff){
 		unsigned int scenarioRand = scenario_rand();
-		if((scenarioRand & 96) == 0) {
-			item_colour = (uint8) (scenarioRand & 31);
-		}
-		else if((scenarioRand & 64) == 0) {
-			item_colour = peep->tshirt_colour;
-		}
-		else {
-			item_colour = peep->trousers_colour;
-		}
+		item_colour = (uint8) (scenarioRand & 31);
 	}
 
 	if (shopItem == SHOP_ITEM_TSHIRT)
