@@ -3899,13 +3899,13 @@ static void window_ride_colour_mousedown(int widgetIndex, rct_window *w, rct_wid
 		}
 
 		window_dropdown_show_text_custom_width(
-				w->x + dropdownWidget->left,
-				w->y + dropdownWidget->top,
-				dropdownWidget->bottom - dropdownWidget->top + 1,
-				w->colours[1],
-				DROPDOWN_FLAG_STAY_OPEN,
-				numItems,
-				widget->right - dropdownWidget->left
+			w->x + dropdownWidget->left,
+			w->y + dropdownWidget->top,
+			dropdownWidget->bottom - dropdownWidget->top + 1,
+			w->colours[1],
+			DROPDOWN_FLAG_STAY_OPEN,
+			numItems,
+			widget->right - dropdownWidget->left
 		);
 
 		dropdown_set_checked(w->var_48C, true);
